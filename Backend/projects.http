@@ -1,0 +1,35 @@
+GET http://localhost:5038/projects
+
+###
+Get http://localhost:5038/projects/2
+
+###
+POST http://localhost:5038/projects
+Content-Type: application/json
+
+{
+    "Name": "test111",
+    "Description": "This is a description of the example project.",
+    "RepositoryUrl": "https://github.com/example/repository",
+    "ProjectUrl": "https://example.com/project",
+    "ImageUrl": "https://example.com/image.jpg",
+    "TagNames": ["WHAT", "C#"],
+    "CreatedDate": "2021-07-01"
+}
+
+###
+PUT http://localhost:5038/projects/15
+Content-Type: application/json
+
+{
+    "Name": "test11",
+    "Description": "This is a description of the example projec",
+    "RepositoryUrl": "https://github.com/example/reposit",
+    "ProjectUrl": "https://example.com/proje",
+    "ImageUrl": "https://example!!!.com/image.jpg",
+    "TagNames": ["WHAT!!!!"],
+    "CreatedDate": "2021-07-01"
+}
+
+###
+DELETE http://localhost:5038/projects/3

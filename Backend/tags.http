@@ -1,0 +1,23 @@
+GET http://localhost:5038/tags
+
+###
+GET http://localhost:5038/tags/1
+
+###
+POST http://localhost:5038/tags
+Content-Type: application/json
+
+{
+  "name": "tag1"
+}
+
+###
+PUT http://localhost:5038/tags/1
+Content-Type: application/json
+
+{
+  "name": "tag2"
+}
+
+###
+DELETE http://localhost:5038/tags/1
