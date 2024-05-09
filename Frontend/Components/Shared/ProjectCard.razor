@@ -18,7 +18,7 @@ else
                 <a href="@Project.RepositoryUrl" target="_blank" class="btn btn-secondary">Source Code</a>
             </div>
             <div class="mt-2">
-                @foreach (var tag in Project.Tags)
+                @foreach (var tag in Project.TagNames)
                 {
                     <span class="badge badge-secondary text-bg-primary">@tag</span>
                 }

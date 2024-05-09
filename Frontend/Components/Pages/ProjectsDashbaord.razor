@@ -33,14 +33,14 @@ else
         @foreach (var project in projects)
         {
             <tr>
-                <td>@project.Id</td>
+                <td>@project.ProjectId</td>
                 <td>@project.Name</td>
                 <td>@project.Description</td>
                 <td><a href="@project.RepositoryUrl" target="_blank">Repository</a></td>
                 <td><a href="@project.ProjectUrl" target="_blank">Project</a></td>
                 <td><img src="@project.ImageUrl" alt="Project Image" width="50" height="50" /></td>
                 <td>
-                    @foreach (var tag in project.Tags)
+                    @foreach (var tag in project.TagNames)
                     {
                         <span class="badge badge-secondary text-bg-primary">@tag</span>
                     }

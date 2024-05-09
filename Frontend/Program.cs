@@ -11,7 +11,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddHttpClient<ProjectsClient>(client =>
 {
-    client.BaseAddress = new Uri("https://localhost:5038/");
+    client.BaseAddress = new Uri("http://localhost:5038/");
 });
 
 var app = builder.Build();

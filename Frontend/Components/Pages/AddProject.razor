@@ -9,76 +9,100 @@
 
 <h1>Add Project</h1>
 
-<EditForm 
-    Model="@project" 
-    FormName="addproject" 
-    OnValidSubmit="HandleSubmitAsync" 
-    > 
+@if (project is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <EditForm Model="@project" FormName="addproject" OnValidSubmit="HandleSubmitAsync">
 
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-    <div class="form-group">
-        <label for="name">Name</label>
-        <InputText id="name" class="form-control" @bind-Value="project.Name" />
-    </div>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <InputText id="name" class="form-control" @bind-Value="project.Name" />
+        </div>
 
-    <div class="form-group">
-        <label for="description">Description</label>
-        <InputText id="description" class="form-control" @bind-Value="project.Description" />
-    </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <InputText id="description" class="form-control" @bind-Value="project.Description" />
+        </div>
 
-    <div class="form-group">
-        <label for="repositoryUrl">Repository Url</label>
-        <InputText id="repositoryUrl" class="form-control" @bind-Value="project.RepositoryUrl" />
-    </div>
+        <div class="form-group">
+            <label for="repositoryUrl">Repository Url</label>
+            <InputText id="repositoryUrl" class="form-control" @bind-Value="project.RepositoryUrl" />
+        </div>
 
-    <div class="form-group">
-        <label for="projectUrl">Project Url</label>
-        <InputText id="projectUrl" class="form-control" @bind-Value="project.ProjectUrl" />
-    </div>
+        <div class="form-group">
+            <label for="projectUrl">Project Url</label>
+            <InputText id="projectUrl" class="form-control" @bind-Value="project.ProjectUrl" />
+        </div>
 
-    <div class="form-group">
-        <label for="imageUrl">Image Url</label>
-        <InputText id="imageUrl" class="form-control" @bind-Value="project.ImageUrl" />
-    </div>
+        <div class="form-group">
+            <label for="imageUrl">Image Url</label>
+            <InputText id="imageUrl" class="form-control" @bind-Value="project.ImageUrl" />
+        </div>
 
-    @* string[] Tags *@
-    <div class="form-group">
-        <label for="tags">Tags</label>
-        <InputText id="tags" class="form-control" @bind-Value="TagsString" />
-    </div>
+        @* string[] Tags *@
+        <div class="form-group">
+            <label for="tags">Tags</label>
+            <InputText id="tags" class="form-control" @bind-Value="TagsString" />
+        </div>
 
-    <div class="form-group">
-        <label for="createdDate">Created Date</label>
-        <InputDate id="createdDate" class="form-control" @bind-Value="project.CreatedDate" />
-    </div>
+        <div class="form-group">
+            <label for="createdDate">Created Date</label>
+            <InputDate id="createdDate" class="form-control" @bind-Value="project.CreatedDate" />
+        </div>
 
-    <button type="submit" class="btn btn-primary">Add Project</button>
-    <a role="button" class="btn btn-secondary" href="/">Cancel</a>
-</EditForm>
+        <button type="submit" class="btn btn-primary">Add Project</button>
+        <a role="button" class="btn btn-secondary" href="/">Cancel</a>
+    </EditForm>
+}
+
+
 
 
 @code
 {
-    private ProjectSummary project = new ProjectSummary
+    private ProjectSummary project = new ProjectSummary()
     {
         Name = "",
         Description = "",
         RepositoryUrl = "",
+        ProjectUrl = "",
         ImageUrl = "",
-        Tags = new string[] { }
+        CreatedDate = DateOnly.FromDateTime(DateTime.UtcNow),
+        TagNames = new List<string>()
     };
-    private string TagsString
+    private string TagsString = "";
+
+    protected override async Task OnInitializedAsync()
     {
-        get => string.Join(", ", project.Tags ?? Array.Empty<string>());
-        set => project.Tags = value?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? Array.Empty<string>();
+        // Initializations if any dependent on parameters
+        await base.OnInitializedAsync();
     }
 
     private async Task HandleSubmitAsync()
     {
-        await ProjectsClient.AddProjectAsync(project);
-        NavigationManager.NavigateTo("/ProjectsDashboard");
+        project.TagNames = ParseTags(TagsString);
+        try
+        {
+            await ProjectsClient.AddProjectAsync(project);
+            NavigationManager.NavigateTo("/ProjectsDashboard");
+        }
+        catch (Exception ex)
+        {
+            // Log error and notify user
+            Console.Error.WriteLine($"Failed to add project: {ex.Message}");
+        }
     }
 
+    private List<string> ParseTags(string tags)
+    {
+        return tags.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                   .Select(tag => tag.Trim())
+                   .ToList();
+    }
 }

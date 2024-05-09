@@ -4,7 +4,7 @@ namespace Frontend.Models
 {
     public class ProjectSummary
     {
-        public int Id { get; set; }
+        public int ProjectId { get; set; }
 
         [Required]
         public required string Name { get; set; }
@@ -24,7 +24,7 @@ namespace Frontend.Models
         public required string ImageUrl { get; set; }
 
         [Required]
-        public required string[] Tags { get; set; }
+        public required List<string> TagNames { get; set; } 
 
         public DateOnly CreatedDate { get; set; }
     }

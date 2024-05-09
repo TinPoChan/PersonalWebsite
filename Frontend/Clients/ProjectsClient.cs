@@ -16,7 +16,7 @@ public class ProjectsClient(HttpClient httpClient)
             throw new Exception("Project not found");
     
     public async Task UpdateProjectAsync(ProjectSummary updatedProject)
-        => await httpClient.PutAsJsonAsync($"projects/{updatedProject.Id}", updatedProject);
+        => await httpClient.PutAsJsonAsync($"projects/{updatedProject.ProjectId}", updatedProject);
     
     public async Task DeleteProjectAsync(int id)
         => await httpClient.DeleteAsync($"projects/{id}");
